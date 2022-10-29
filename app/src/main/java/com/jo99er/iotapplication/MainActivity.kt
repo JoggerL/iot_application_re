@@ -60,7 +60,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onSignupClicked() {
-
+        val intent = Intent(this, SignupActivity::class.java)
+        startActivity(intent)
     }
 
     companion object {

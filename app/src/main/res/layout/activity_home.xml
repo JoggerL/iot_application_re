@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="158dp"
-            android:layout_marginTop="292dp"
+            android:layout_marginTop="150dp"
             android:layout_marginEnd="159dp"
             android:layout_marginBottom="16dp"
             android:text="Sign Out"
@@ -31,6 +31,43 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text" />
+
+        <Button
+            android:id="@+id/button_one_lead"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="31dp"
+            android:text="@string/one_ecg_lead_service"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_three_lead"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="31dp"
+            android:text="@string/three_ecg_lead_service"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_one_lead" />
+
+        <Button
+            android:id="@+id/button_twelve_lead"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="31dp"
+            android:text="@string/twelve_ecg_lead_service"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_three_lead" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

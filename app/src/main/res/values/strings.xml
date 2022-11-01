@@ -8,4 +8,7 @@
     <string name="signup_your_password">Type Your Password</string>
     <string name="repeat_your_password">Repeat Your Password</string>
     <string name="sign_up">Sign Up</string>
+    <string name="one_ecg_lead_service">One ECG Lead Service</string>
+    <string name="three_ecg_lead_service">THREE ECG Lead Service</string>
+    <string name="twelve_ecg_lead_service">TWELVE ECG Lead Service</string>
 </resources>

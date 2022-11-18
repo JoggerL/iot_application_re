@@ -7,4 +7,5 @@
     <string name="one_ecg_lead_service">One ECG Lead Service</string>
     <string name="three_ecg_lead_service">THREE ECG Lead Service</string>
     <string name="twelve_ecg_lead_service">TWELVE ECG Lead Service</string>
+    <string name="real_time_service">REAL-TIME SERVICE</string>
 </resources>

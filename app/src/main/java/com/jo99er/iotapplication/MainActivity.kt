@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                 // If sign in fails, display a message to the user.
             }
         }
-        finish()
+//        finish()
     }
 
     private fun onSignupClicked() {

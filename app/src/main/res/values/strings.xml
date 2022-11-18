@@ -2,6 +2,7 @@
     <string name="app_name">IotApplication</string>
     <string name="type_your_email">Type your Email</string>
     <string name="sign_in">Sign In</string>
+    <string name="type_your_ts">Type specific timestamp</string>
 
     <string name="home_welcome_message">Welcome to this awesome app</string>
     <string name="signup_your_email">Type your Email</string>

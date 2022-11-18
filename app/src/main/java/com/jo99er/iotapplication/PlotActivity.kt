@@ -2,14 +2,22 @@ package com.jo99er.iotapplication
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import android.util.Range
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.jo99er.iotapplication.databinding.ActivityPlotBinding
-
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Retrofit
+import retrofit2.awaitResponse
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class PlotActivity : AppCompatActivity() {
@@ -18,36 +26,58 @@ class PlotActivity : AppCompatActivity() {
 //    private lateinit var databaseName:MongoDatabase
 //    private lateinit var collection:MongoCollection<Document>
     private lateinit var _binding: ActivityPlotBinding
+    private var ts = 1642134212684
+//    private var ts1 = 1642134212684
+
+    private val api: ApiRequest by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://joggeriot.herokuapp.com")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiRequest::class.java)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityPlotBinding.inflate(layoutInflater)
         setContentView(_binding.root)
-        addData()
-        addData2()
-//        lifecycleScope.launch(Dispatchers.Main) {
-//            _binding.testText.text = "Connecting"
-//            MongodbUtils.getInstance().connect()
-//            _binding.testText.text = "DB Connected"
-//            val a = MongodbUtils.getInstance().dbConnection()
-////            _binding.testText.text = a
-//
-//        }
+        _binding.testText.text = "Connecting to Server"
+        lifecycleScope.launch(Dispatchers.IO) {
+//            getData()
+
+            val response = api.getEcgData(ts).awaitResponse()
+            val data = response.body()?.data
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful && data != null) {
+                    Log.i(TAG, "Data Successfully Obtained")
+
+//                Log.i(TAG, data)
+                    _binding.testText.text = "Connected to Server! :)"
+                    addData(data, data.size)
+                } else {
+                    Log.i(TAG, "FAILED")
+                    _binding.testText.text = "Cannot get data"
+                }
+
+            }
+
+        }
     }
 
 
-    fun addData() {
-        val entries = ArrayList<Entry>()
-        entries.add(Entry(1f, 10f))
-        entries.add(Entry(2f, 2f))
-        entries.add(Entry(3f, 7f))
-        entries.add(Entry(4f, 20f))
-        entries.add(Entry(5f, 16f))
-        val vl = LineDataSet(entries, "My Type")
+    fun addData(datalist: List<Long>, ecgSize: Int) {
+        val entries = ArrayList<Entry>(ecgSize)
+        for (i in 0 until ecgSize) {
+            val floatIndex = i.toFloat()
+            val floatEcg = datalist[i].toFloat()
+            entries.add(Entry(floatIndex, floatEcg))
+        }
+        val vl = LineDataSet(entries, "ECG Signal 01")
         vl.setDrawValues(false)
         vl.setDrawFilled(true)
         vl.lineWidth = 3f
-        vl.fillColor = com.google.android.material.R.color.mtrl_btn_transparent_bg_color
+//        vl.fillColor = com.google.android.material.R.color.mtrl_btn_transparent_bg_color
         vl.fillAlpha = R.color.black
         _binding.lineChart.data = LineData(vl)
         _binding.lineChart.xAxis.labelRotationAngle = 0f
@@ -56,36 +86,61 @@ class PlotActivity : AppCompatActivity() {
 
         _binding.lineChart.setTouchEnabled(true)
         _binding.lineChart.setPinchZoom(true)
-    }
-    fun addData2() {
-        val entries = ArrayList<Entry>()
-        entries.add(Entry(1f, 10f))
-        entries.add(Entry(2f, 2f))
-        entries.add(Entry(3f, 7f))
-        entries.add(Entry(4f, 20f))
-        entries.add(Entry(5f, 16f))
-        val vl = LineDataSet(entries, "Second")
-        vl.setDrawValues(false)
-        vl.setDrawFilled(true)
-        vl.lineWidth = 3f
-        vl.fillColor = com.google.android.material.R.color.mtrl_btn_transparent_bg_color
-        vl.fillAlpha = R.color.black
-        _binding.lineChart2.data = LineData(vl)
-        _binding.lineChart2.xAxis.labelRotationAngle = 0f
+//        val floatLen = (ecgSize.toFloat())/10
+//        _binding.lineChart.setVisibleXRangeMaximum(floatLen)
+        _binding.lineChart.isScaleYEnabled = false
+        _binding.lineChart.description.isEnabled = false;
 
-        _binding.lineChart2.data = LineData(vl)
-
-        _binding.lineChart2.setTouchEnabled(true)
-        _binding.lineChart2.setPinchZoom(true)
-        _binding.lineChart2.setVisibleXRangeMaximum(2f);
-        _binding.lineChart2.description.isEnabled = false;
-//        val l1 = LegendEntry("hey", Legend.LegendForm.CIRCLE, 10f, 2f, null, Color.YELLOW)
-////        val l2 = LegendEntry("Female", Legend.LegendForm.CIRCLE, 10f, 2f, null, Color.RED)
-//        _binding.lineChart2.legend.setCustom(arrayOf(l1))
     }
+
+//    fun addData2(datalist: List<Long>, ecgSize: Int) {
+//        val entries = ArrayList<Entry>(ecgSize)
+//        for (i in 0 until ecgSize) {
+//            val floatIndex = i.toFloat()
+//            val floatEcg = datalist[i].toFloat()
+//            entries.add(Entry(floatIndex, floatEcg))
+//        }
+//        val vl = LineDataSet(entries, "ECG Signal 02")
+//        vl.setDrawValues(false)
+//        vl.setDrawFilled(true)
+//        vl.lineWidth = 3f
+////        vl.fillColor = com.google.android.material.R.color.mtrl_btn_transparent_bg_color
+//        vl.fillAlpha = R.color.black
+//        _binding.lineChart2.data = LineData(vl)
+//        _binding.lineChart2.xAxis.labelRotationAngle = 0f
+//
+//        _binding.lineChart2.data = LineData(vl)
+//
+//        _binding.lineChart2.setTouchEnabled(true)
+//        _binding.lineChart2.setPinchZoom(true)
+////        val floatLen = (ecgSize.toFloat())/10
+////        _binding.lineChart.setVisibleXRangeMaximum(floatLen)
+//        _binding.lineChart2.isScaleYEnabled = false
+//        _binding.lineChart2.description.isEnabled = false;
+////        val l1 = LegendEntry("hey", Legend.LegendForm.CIRCLE, 10f, 2f, null, Color.YELLOW)
+//////        val l2 = LegendEntry("Female", Legend.LegendForm.CIRCLE, 10f, 2f, null, Color.RED)
+////        _binding.lineChart2.legend.setCustom(arrayOf(l1))
+//    }
 
     companion object {
         private val TAG = PlotActivity::class.simpleName
     }
+
+//    private fun getData(ts: Number) {
+//        val api = Retrofit.Builder()
+//            .baseUrl("a")
+//            .build()
+//            .create(ApiRequest::class.java)
+//        lifecycleScope.launch(Dispatchers.IO){
+//            val response = api.getEcgData(ts).awaitResponse()
+//            if (response.isSuccessful){
+//                val data = response.body()!!
+//            }
+//            withContext(Dispatchers.Main){
+//
+//            }
+//        }
+//
+//    }
 }
 

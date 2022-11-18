@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ScrollView
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="401dp">
@@ -19,13 +19,11 @@
                 android:id="@+id/test_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="196dp"
-                android:layout_marginTop="150dp"
-                android:layout_marginEnd="196dp"
                 android:text="TextView"
+                app:layout_constraintBottom_toTopOf="@+id/ts_input_holder"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ts_input_holder" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -61,12 +59,23 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/email_input"
+                    android:id="@+id/ts_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/type_your_ts"
                     android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
+                android:text="Plot"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ts_input_holder" />
 
 
             <!--    <LinearLayout-->

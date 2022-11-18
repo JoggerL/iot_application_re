@@ -21,13 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class PlotActivity : AppCompatActivity() {
-    //Part1
-    //    private lateinit var mongoClient:MongoClients
-//    private lateinit var databaseName:MongoDatabase
-//    private lateinit var collection:MongoCollection<Document>
     private lateinit var _binding: ActivityPlotBinding
-    private var ts = 1642134212684
-//    private var ts1 = 1642134212684
 
     private val api: ApiRequest by lazy {
         Retrofit.Builder()
@@ -43,21 +37,33 @@ class PlotActivity : AppCompatActivity() {
         _binding = ActivityPlotBinding.inflate(layoutInflater)
         setContentView(_binding.root)
         _binding.testText.text = "Connecting to Server"
-        lifecycleScope.launch(Dispatchers.IO) {
-//            getData()
+        _binding.button2.setOnClickListener { onPlotClicked() }
 
-            val response = api.getEcgData(ts).awaitResponse()
-            val data = response.body()?.data
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful && data != null) {
-                    Log.i(TAG, "Data Successfully Obtained")
+    }
+
+    private fun onPlotClicked(){
+        if (_binding.tsInput.text?.isEmpty() != false) {
+            _binding.testText.text = "Invalid Information"
+            return
+        } else {
+            lifecycleScope.launch(Dispatchers.IO) {
+//            getData()
+                val ts = _binding.tsInput.text.toString().toLong()
+                val response = api.getEcgData(ts).awaitResponse()
+
+                withContext(Dispatchers.Main) {
+                    val data = response.body()?.data
+                    if (response.isSuccessful && data != null) {
+                        Log.i(TAG, "Data Successfully Obtained")
 
 //                Log.i(TAG, data)
-                    _binding.testText.text = "Connected to Server! :)"
-                    addData(data, data.size)
-                } else {
-                    Log.i(TAG, "FAILED")
-                    _binding.testText.text = "Cannot get data"
+                        _binding.testText.text = "Connected to Server! :)  Null Document Will Result Blank Plot"
+                        addData(data, data.size)
+                    } else {
+                        Log.i(TAG, "FAILED")
+                        _binding.testText.text = "Cannot get data"
+                    }
+
                 }
 
             }
